@@ -1,23 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simple Game Portal</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameZone</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Simple Game Portal</h1>
+    <h1>🎮 GameZone</h1>
+    <input type="text" id="searchBar" placeholder="Search games...">
   </header>
 
-  <main>
-    <div id="game-list" class="game-list"></div>
-    <div id="game-frame" class="game-frame hidden">
-      <button id="back-btn" class="back-btn">← Back</button>
-      <iframe id="iframe" src="" frameborder="0" allowfullscreen></iframe>
+  <nav>
+    <button class="category active" data-category="all">All</button>
+    <button class="category" data-category="action">Action</button>
+    <button class="category" data-category="arcade">Arcade</button>
+    <button class="category" data-category="puzzle">Puzzle</button>
+  </nav>
+
+  <main id="gameGrid"></main>
+
+  <div id="playerModal" class="hidden">
+    <div id="playerContent">
+      <button id="closeBtn">✖</button>
+      <iframe id="gameFrame" allowfullscreen></iframe>
+      <div id="inlineContainer"></div>
     </div>
-  </main>
+  </div>
 
   <script src="script.js"></script>
 </body>
