@@ -1,34 +1,28 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GameZone</title>
+  <title>GameHub</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>🎮 GameZone</h1>
-    <input type="text" id="searchBar" placeholder="Search games...">
+    <h1>GameHub</h1>
   </header>
 
-  <nav>
-    <button class="category active" data-category="all">All</button>
-    <button class="category" data-category="action">Action</button>
-    <button class="category" data-category="arcade">Arcade</button>
-    <button class="category" data-category="puzzle">Puzzle</button>
-  </nav>
-
-  <main id="gameGrid"></main>
-
-  <div id="playerModal" class="hidden">
-    <div id="playerContent">
-      <button id="closeBtn">✖</button>
-      <iframe id="gameFrame" allowfullscreen></iframe>
-      <div id="inlineContainer"></div>
+  <main>
+    <div class="game-grid">
+      <a href="games/flappybird.html" class="game-card">
+        <img src="assets/images/flappy.png" alt="Flappy Bird">
+        <h3>Flappy Bird</h3>
+      </a>
+      <a href="games/snake.html" class="game-card">
+        <img src="assets/images/snake.png" alt="Snake">
+        <h3>Snake</h3>
+      </a>
     </div>
-  </div>
+  </main>
 
   <script src="script.js"></script>
 </body>
