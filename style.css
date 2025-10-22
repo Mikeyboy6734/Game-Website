@@ -1,17 +1,27 @@
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Body */
 body {
   font-family: Arial, sans-serif;
-  margin: 0;
   background: #f0f0f0;
   color: #333;
 }
 
+/* Header */
 header {
-  text-align: center;
-  padding: 20px;
   background: #4CAF50;
   color: white;
+  text-align: center;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
+/* Game Grid */
 .game-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -19,18 +29,21 @@ header {
   padding: 20px;
 }
 
+/* Game Cards */
 .game-card {
-  text-decoration: none;
-  color: inherit;
+  display: block;
   background: white;
   border-radius: 10px;
   overflow: hidden;
+  text-decoration: none;
+  color: inherit;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .game-card:hover {
   transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
 }
 
 .game-card img {
@@ -41,4 +54,14 @@ header {
 .game-card h3 {
   text-align: center;
   padding: 10px 0;
+  font-size: 1.1rem;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 15px;
+  background: #333;
+  color: white;
+  margin-top: 20px;
 }
