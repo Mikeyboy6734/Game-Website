@@ -1,86 +1,128 @@
 const games = [
   {
-    title: "Flappy Bird",
-    slug: "flappy",
-    category: "arcade",
-    thumbnail: "https://upload.wikimedia.org/wikipedia/en/0/0a/Flappy_Bird_icon.png",
-    type: "iframe"
+    name: "Flappy Bird",
+    image: "assets/images/flappy.png",
+    start: function(container) {
+      container.innerHTML = `<canvas id="flappy" width="320" height="480"></canvas>`;
+      const canvas = document.getElementById('flappy');
+      const ctx = canvas.getContext('2d');
+
+      let bird = { x:50, y:150, w:20, h:20, dy:0 };
+      let gravity = 0.6;
+      let pipes = [];
+      let frame = 0;
+      let score = 0;
+
+      function drawBird() {
+        ctx.fillStyle = "yellow";
+        ctx.fillRect(bird.x, bird.y, bird.w, bird.h);
+      }
+
+      function drawPipes() {
+        ctx.fillStyle = "green";
+        pipes.forEach(p => ctx.fillRect(p.x, 0, 30, p.top), ctx.fillRect(p.x, canvas.height - p.bottom, 30, p.bottom));
+      }
+
+      function update() {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        bird.dy += gravity;
+        bird.y += bird.dy;
+
+        if(frame % 90 === 0){
+          let top = Math.random()*200 + 50;
+          let bottom = 400 - top - 100;
+          pipes.push({x:320, top, bottom});
+        }
+
+        pipes.forEach(p => p.x -= 2);
+        pipes = pipes.filter(p => p.x > -30);
+
+        pipes.forEach(p => {
+          if(bird.x + bird.w > p.x && bird.x < p.x + 30 &&
+             (bird.y < p.top || bird.y + bird.h > canvas.height - p.bottom)) {
+            alert("Game Over! Score: " + score);
+            container.innerHTML = "";
+          }
+        });
+
+        pipes.forEach(p => {
+          if(p.x + 30 === bird.x) score++;
+        });
+
+        drawBird();
+        drawPipes();
+        frame++;
+        requestAnimationFrame(update);
+      }
+
+      document.addEventListener('keydown', () => bird.dy = -8);
+      update();
+    }
   },
   {
-    title: "Snake",
-    slug: "snake",
-    category: "puzzle",
-    thumbnail: "https://cdn-icons-png.flaticon.com/512/1048/1048949.png",
-    type: "iframe"
-  },
-  {
-    title: "Box Clicker (Inline JS Example)",
-    slug: "boxclicker",
-    category: "action",
-    thumbnail: "https://cdn-icons-png.flaticon.com/512/833/833472.png",
-    type: "inline"
+    name: "Snake",
+    image: "assets/images/snake.png",
+    start: function(container) {
+      container.innerHTML = `<canvas id="snake" width="400" height="400"></canvas>`;
+      const canvas = document.getElementById('snake');
+      const ctx = canvas.getContext('2d');
+      const box = 20;
+      let snake = [{x: 8*box, y: 8*box}];
+      let dir = "RIGHT";
+      let food = {x: Math.floor(Math.random()*20)*box, y: Math.floor(Math.random()*20)*box};
+
+      function draw() {
+        ctx.fillStyle = "#111";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        snake.forEach((s,i)=>{
+          ctx.fillStyle = i===0 ? "lime" : "green";
+          ctx.fillRect(s.x, s.y, box, box);
+        });
+
+        ctx.fillStyle = "red";
+        ctx.fillRect(food.x, food.y, box, box);
+
+        let head = {...snake[0]};
+        if(dir==="LEFT") head.x -= box;
+        if(dir==="RIGHT") head.x += box;
+        if(dir==="UP") head.y -= box;
+        if(dir==="DOWN") head.y += box;
+
+        if(head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height || snake.some(s=>s.x===head.x && s.y===head.y)){
+          alert("Game Over!");
+          container.innerHTML = "";
+        }
+
+        snake.unshift(head);
+        if(head.x===food.x && head.y===food.y){
+          food = {x: Math.floor(Math.random()*20)*box, y: Math.floor(Math.random()*20)*box};
+        } else {
+          snake.pop();
+        }
+      }
+
+      document.addEventListener('keydown', e=>{
+        if(e.key==="ArrowLeft" && dir!=="RIGHT") dir="LEFT";
+        if(e.key==="ArrowRight" && dir!=="LEFT") dir="RIGHT";
+        if(e.key==="ArrowUp" && dir!=="DOWN") dir="UP";
+        if(e.key==="ArrowDown" && dir!=="UP") dir="DOWN";
+      });
+
+      setInterval(draw, 100);
+    }
   }
 ];
 
-const gameGrid = document.getElementById("gameGrid");
-const searchBar = document.getElementById("searchBar");
-const modal = document.getElementById("playerModal");
-const iframe = document.getElementById("gameFrame");
-const inlineContainer = document.getElementById("inlineContainer");
-const closeBtn = document.getElementById("closeBtn");
+// Render game grid
+const grid = document.getElementById('game-grid');
+const container = document.getElementById('game-container');
 
-function renderGames(filter = "all", search = "") {
-  gameGrid.innerHTML = "";
-  const filtered = games.filter(g =>
-    (filter === "all" || g.category === filter) &&
-    g.title.toLowerCase().includes(search.toLowerCase())
-  );
-
-  filtered.forEach(g => {
-    const card = document.createElement("div");
-    card.className = "game-card";
-    card.innerHTML = `<img src="${g.thumbnail}" alt="${g.title}"><h3>${g.title}</h3>`;
-    card.onclick = () => openGame(g);
-    gameGrid.appendChild(card);
-  });
-}
-
-function openGame(game) {
-  modal.classList.remove("hidden");
-  if (game.type === "iframe") {
-    iframe.src = `games/${game.slug}/index.html`;
-    iframe.style.display = "block";
-    inlineContainer.style.display = "none";
-  } else {
-    iframe.style.display = "none";
-    inlineContainer.style.display = "block";
-    inlineContainer.innerHTML = `
-      <div id="clicker" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;">
-        <button id="box" style="width:100px;height:100px;background:#00bcd4;border:none;border-radius:10px;cursor:pointer;font-size:1.5rem;">Click!</button>
-        <p id="score">0</p>
-      </div>`;
-    let score = 0;
-    document.getElementById("box").onclick = () => {
-      score++;
-      document.getElementById("score").textContent = score;
-    };
-  }
-}
-
-closeBtn.onclick = () => {
-  modal.classList.add("hidden");
-  iframe.src = "";
-};
-
-searchBar.oninput = (e) => renderGames(document.querySelector(".category.active").dataset.category, e.target.value);
-
-document.querySelectorAll(".category").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".category").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    renderGames(btn.dataset.category, searchBar.value);
-  });
+games.forEach(game => {
+  const card = document.createElement('div');
+  card.className = 'game-card';
+  card.innerHTML = `<img src="${game.image}" alt="${game.name}"><h3>${game.name}</h3>`;
+  card.onclick = () => game.start(container);
+  grid.appendChild(card);
 });
-
-renderGames();
-
+                                
