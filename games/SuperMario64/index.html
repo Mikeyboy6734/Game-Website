@@ -2,32 +2,54 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Super Mario 64 - N64Wasm</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Mario 64</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    #emulator-container canvas {
+      max-width: 100%;
+      border: 2px solid #333;
+      border-radius: 10px;
+    }
+  </style>
 </head>
 <body>
   <h1>Super Mario 64</h1>
   <div id="emulator-container"></div>
 
-  <script src="n64wasm.js"></script> <!-- your N64Wasm emulator script -->
+  <!-- N64Wasm Emulator JS -->
+  <script src="../../n64wasm.js"></script> <!-- adjust path if needed -->
 
   <script>
     const romPath = "ROM/SM64.z64"; // path to your ROM
 
-    // Load ROM and start emulator
     fetch(romPath)
       .then(response => response.arrayBuffer())
       .then(buffer => {
         const romData = new Uint8Array(buffer);
 
-        // Initialize N64Wasm emulator
+        // Initialize the emulator
         const emulator = new N64Wasm.Emulator({
-          canvas: document.getElementById('emulator-container'),
+          canvas: document.createElement('canvas'), // create a canvas
         });
 
-        // Load the ROM
-        emulator.loadRom(romData);
+        // Add canvas to container
+        const container = document.getElementById('emulator-container');
+        container.appendChild(emulator.canvas);
 
-        // Start the game
+        // Load ROM and start the emulator
+        emulator.loadRom(romData);
         emulator.start();
       })
       .catch(err => {
