@@ -1,6 +1,6 @@
 const games = [
   { name: "Flappy Bird", thumbnail: "assets/images/flappy.png", path: "/games/flappy/index.html" },
-  { name: "Super Mario 64", thumbnail: "assets/images/sm64.png", path: "games/Super Mario 64/index.html" }
+  { name: "Super Mario 64", thumbnail: "assets/images/sm64.jpeg", path: "games/Super Mario 64/index.html" }
 ];
 
 const grid = document.getElementById('game-grid');
