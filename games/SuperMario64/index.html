@@ -3,29 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <title>Super Mario 64</title>
-  <script src="js/js64.js"></script> <!-- emulator JS -->
 </head>
 <body>
   <h1>Super Mario 64</h1>
-  <canvas id="screen" width="640" height="480"></canvas>
-  <input type="file" id="romInput" accept=".n64,.z64"/>
-  
-  <script>
-    const canvas = document.getElementById('screen');
-    const romInput = document.getElementById('romInput');
-    
-    romInput.addEventListener('change', async (event) => {
-      const file = event.target.files[0];
-      if (!file) return;
-      
-      const arrayBuffer = await file.arrayBuffer();
-      const romData = new Uint8Array(arrayBuffer);
+  <div id="emulator-container"></div>
 
-      // Start the emulator
-      const emulator = new JS64({canvas: canvas});
-      emulator.loadROM(romData);
-      emulator.start();
-    });
+  <script src="emulator.js"></script> <!-- Your emulator JS -->
+
+  <script>
+    // Path to the ROM
+    const romPath = "ROM/SM64.z64";
+
+    // Example using fetch to load the ROM
+    fetch(romPath)
+      .then(response => response.arrayBuffer())
+      .then(buffer => {
+        // Assuming your emulator has a `loadROM` function
+        Emulator.loadROM(new Uint8Array(buffer));
+        Emulator.start();
+      })
+      .catch(err => {
+        console.error("Failed to load ROM:", err);
+      });
   </script>
 </body>
 </html>
