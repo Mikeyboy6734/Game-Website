@@ -1,6 +1,14 @@
 const games = [
-  { name: "Flappy Bird", thumbnail: "assets/images/flappy.png", path: "games/flappy/index.html" },
-  { name: "Super Mario 64", thumbnail: "assets/images/sm64.jpeg", path: "games/SuperMario64/index.html" }
+  {
+    name: "Flappy Bird",
+    thumbnail: "assets/images/flappy.png",
+    path: "games/flappy/index.html"
+  },
+  {
+    name: "Super Mario 64",
+    thumbnail: "assets/images/sm64.jpeg",
+    path: "games/SuperMario64/index.html" // points to N64Wasm page
+  }
 ];
 
 const grid = document.getElementById('game-grid');
