@@ -2,25 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Super Mario 64</title>
+  <title>Super Mario 64 - N64Wasm</title>
 </head>
 <body>
   <h1>Super Mario 64</h1>
   <div id="emulator-container"></div>
 
-  <script src="emulator.js"></script> <!-- Your emulator JS -->
+  <script src="n64wasm.js"></script> <!-- your N64Wasm emulator script -->
 
   <script>
-    // Path to the ROM
-    const romPath = "ROM/SM64.z64";
+    const romPath = "ROM/SM64.z64"; // path to your ROM
 
-    // Example using fetch to load the ROM
+    // Load ROM and start emulator
     fetch(romPath)
       .then(response => response.arrayBuffer())
       .then(buffer => {
-        // Assuming your emulator has a `loadROM` function
-        Emulator.loadROM(new Uint8Array(buffer));
-        Emulator.start();
+        const romData = new Uint8Array(buffer);
+
+        // Initialize N64Wasm emulator
+        const emulator = new N64Wasm.Emulator({
+          canvas: document.getElementById('emulator-container'),
+        });
+
+        // Load the ROM
+        emulator.loadRom(romData);
+
+        // Start the game
+        emulator.start();
       })
       .catch(err => {
         console.error("Failed to load ROM:", err);
